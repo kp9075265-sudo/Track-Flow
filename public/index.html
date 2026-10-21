@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TrackFlow | Product Tracking</title><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">T</div><div><b>TrackFlow</b><small>PRODUCT OPERATIONS</small></div></div>
+    <div class="nav-label">WORKSPACE</div>
+    <button class="nav active" data-page="dashboard"><span>▦</span> Dashboard</button>
+    <button class="nav" data-page="products"><span>▣</span> Products</button>
+    <button class="nav" data-page="shipments"><span>⌁</span> Shipment tracking</button>
+    <div class="sidebar-bottom"><div class="connection-dot"></div><div><b>Database connection</b><small id="db-status">Checking PostgreSQL…</small></div></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><div class="eyebrow">PRODUCT TRACKING MANAGEMENT</div><h1 id="page-title">Dashboard overview</h1></div><div class="top-actions"><span class="today" id="today"></span><div class="avatar">PT</div></div></header>
+    <div id="notice" class="notice hidden"></div>
+    <section id="dashboard-page" class="page">
+      <div class="welcome"><div><div class="eyebrow light">YOUR OPERATIONS AT A GLANCE</div><h2>Keep every product moving.</h2><p>Monitor inventory, orders and deliveries from one place.</p></div><div class="welcome-icon">↗</div></div>
+      <div class="stats-grid">
+        <article class="stat-card"><div class="stat-top"><span>Total products</span><span class="stat-icon violet">▣</span></div><strong id="stat-products">—</strong><small>Items in your catalogue</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Units in stock</span><span class="stat-icon blue">▤</span></div><strong id="stat-stock">—</strong><small>Across all products</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Total customers</span><span class="stat-icon orange">♙</span></div><strong id="stat-customers">—</strong><small>Registered customers</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Total orders</span><span class="stat-icon green">⌑</span></div><strong id="stat-orders">—</strong><small>Orders in the system</small></article>
+      </div>
+      <div class="stats-grid second-row">
+        <article class="stat-card compact"><div class="stat-top"><span>Active shipments</span><span class="stat-icon blue">➜</span></div><strong id="stat-active">—</strong><small>Not yet delivered</small></article>
+        <article class="stat-card compact"><div class="stat-top"><span>Delivered shipments</span><span class="stat-icon green">✓</span></div><strong id="stat-delivered">—</strong><small>Successfully delivered</small></article>
+        <article class="stat-card compact sales"><div class="stat-top"><span>Order value total</span><span class="stat-icon violet">₹</span></div><strong id="stat-sales">—</strong><small>Sum of recorded order amounts</small></article>
+      </div>
+      <div class="content-card"><div class="section-heading"><div><h3>Recent orders</h3><p>Latest activity recorded in your database</p></div><button class="text-button" data-goto="shipments">View shipments ↗</button></div>
+      <div class="table-wrap"><table><thead><tr><th>ORDER</th><th>CUSTOMER</th><th>ORDER DATE</th><th>AMOUNT</th><th>ORDER STATUS</th><th>SHIPMENT</th></tr></thead><tbody id="recent-orders"><tr><td colspan="6" class="empty">Loading orders…</td></tr></tbody></table></div></div>
+    </section>
+    <section id="products-page" class="page hidden">
+      <div class="page-intro"><div><h2>Product catalogue</h2><p>Manage product details, categories, prices and available stock.</p></div><button class="primary-button" id="add-product">＋ Add product</button></div>
+      <div class="content-card"><div class="toolbar"><div class="searchbox"><span>⌕</span><input id="product-search" placeholder="Search product, category or ID…"></div><span id="product-count" class="muted">Loading products…</span></div>
+      <div class="table-wrap"><table><thead><tr><th>PRODUCT</th><th>CATEGORY</th><th>PRICE</th><th>STOCK</th><th>STOCK STATUS</th><th>ACTIONS</th></tr></thead><tbody id="products-body"><tr><td colspan="6" class="empty">Loading products…</td></tr></tbody></table></div></div>
+    </section>
+    <section id="shipments-page" class="page hidden">
+      <div class="page-intro"><div><h2>Shipment tracking</h2><p>Look up shipment status and add delivery timeline updates.</p></div><button class="secondary-button" id="refresh-shipments">↻ Refresh</button></div>
+      <div class="content-card"><div class="toolbar"><div class="searchbox"><span>⌕</span><input id="shipment-search" placeholder="Search shipment ID, order, status or city…"></div><span id="shipment-count" class="muted">Loading shipments…</span></div>
+      <div class="table-wrap"><table><thead><tr><th>SHIPMENT</th><th>ORDER</th><th>WAREHOUSE</th><th>DELIVERY AGENT</th><th>LAST LOCATION</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="shipments-body"><tr><td colspan="7" class="empty">Loading shipments…</td></tr></tbody></table></div></div>
+      <div id="tracking-panel" class="content-card hidden"><div class="section-heading"><div><h3 id="tracking-title">Tracking history</h3><p>Most recent update appears first.</p></div><button class="secondary-button" id="close-tracking">Close</button></div><div id="tracking-history" class="timeline"></div>
+        <form id="tracking-form" class="inline-form"><input type="hidden" id="tracking-shipment-id"><label>Current location<input id="tracking-location" required placeholder="e.g. Ahmedabad Hub"></label><label>Status<select id="tracking-status" required><option>Packed</option><option>In Transit</option><option>Out for Delivery</option><option>Delivered</option><option>Delayed</option></select></label><button class="primary-button" type="submit">Add update</button></form>
+      </div>
+    </section>
+    <footer>TrackFlow <span>·</span> Product Tracking Management System</footer>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </main>
+</div>
+<div class="modal-backdrop hidden" id="product-modal"><div class="modal"><div class="modal-head"><div><h2 id="modal-title">Add product</h2><p>Product details are saved directly to PostgreSQL.</p></div><button class="close-button" id="close-modal" aria-label="Close">×</button></div>
+<form id="product-form"><input type="hidden" id="edit-product-id"><label>Product name<input id="product-name" required maxlength="150" placeholder="e.g. Wireless Headphones"></label><label>Category<select id="product-category" required></select></label><label>Description<textarea id="product-description" rows="3" placeholder="Short product description"></textarea></label><div class="form-row"><label>Price (₹)<input id="product-price" type="number" min="0" step="0.01" required placeholder="0.00"></label><label>Stock quantity<input id="product-stock" type="number" min="0" step="1" required placeholder="0"></label></div><div class="modal-actions"><button type="button" class="secondary-button" id="cancel-modal">Cancel</button><button type="submit" class="primary-button">Save product</button></div></form></div></div>
+<script src="app.js"></script>
+</body></html>
